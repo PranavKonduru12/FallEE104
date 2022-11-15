@@ -2,7 +2,7 @@ Name: Pranav Konduru
 Class: EE 104
 Lab 7:
 
-Video link: 
+Video link for Balloon game: https://youtu.be/G6EwDdTtDrY 
 
 
 ***MAKE SURE THAT THE FOLLOWING PYTHON MODULES ARE INSTALLED using pip install "library name"***
