@@ -1,6 +1,6 @@
 Name: Pranav Konduru
 Class: EE 104
-Lab 8: 
+Lab 8: Using Yolov5 to Identify objects
 
 Video link for Yolov5 Challenge: https://youtu.be/6DPVud1udRw 
 Video link for Dance Challenge: https://youtu.be/zI2w8GE-pf4
