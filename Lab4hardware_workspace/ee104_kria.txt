@@ -1,0 +1,9 @@
+kria:9090/lab
+
+user: xilinx
+password: xilinx
+
+PMOD pinout layout
+
+
+ORIGINAL: 192.168.137.1

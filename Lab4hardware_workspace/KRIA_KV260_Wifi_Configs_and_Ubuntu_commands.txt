@@ -1,0 +1,258 @@
+################################################################
+####          BOOT KRIA KV260 FOR THE FIRST TIME     ###########
+################################################################
+# https://www.xilinx.com/products/som/kria/kv260-vision-starter-kit/kv260-getting-started/getting-started.html
+
+# click on the red button "Try Ubuntu 22.04" to go to Step 1
+#  which is this URL https://www.xilinx.com/products/som/kria/kv260-vision-starter-kit/kv260-getting-started-ubuntu/setting-up-the-sd-card-image.html?source=kv260_getting_started&medium=website&campaign=vision_som&content=ubuntu
+
+# click on the link from 1. Download the Kria Ubuntu Desktop 22.04 LTS Image 
+#  you will go to this page https://ubuntu.com/download/amd-xilinx
+# Now, do not download version 22.04 LTS (it is a pre-released version). 
+#  Instead, download the version 20.04.3 LTS right below (this is a released version)
+#  Save the zip file iot-kria-classic-desktop-2004-x03-20211110-98.img.xz to a folder. Remember the name of that folder.
+#  Use 7z to unzip the image, you will get the folder that contain the image iot-kria-classic-desktop-2004-x03-20211110-98, it is about 6GB
+
+###Download Win32DiskImager from here: https://sourceforge.net/projects/win32diskimager/ 
+# Install it on your computer
+
+###You may also want to use Angry IP Scanner later, download it from here:
+# https://angryip.org/download/#windows 
+
+### Now follow the screenshot for "Instruction for Windows" from this URL to burn the image to the SD card:
+#https://www.xilinx.com/products/som/kria/kv260-vision-starter-kit/kv260-getting-started-ubuntu/setting-up-the-sd-card-image.html?source=kv260_getting_started&medium=website&campaign=vision_som&content=ubuntu
+
+# Move on to the "Next Step" (Step 2) to this URL and follow the instruction on this page:  https://www.xilinx.com/products/som/kria/kv260-vision-starter-kit/kv260-getting-started-ubuntu/connecting-everything.html
+
+# Move on to the "Next Step" (Step 3) to this URL and follow the instruction on this page:  https://www.xilinx.com/products/som/kria/kv260-vision-starter-kit/kv260-getting-started-ubuntu/booting-your-starter-kit.html
+# Tera Term  download: https://download.cnet.com/Tera-Term/3000-2094_4-75766675.html
+# Putty download: https://download.cnet.com/Putty/3000-7240_4-15129.html 
+# If you don't have TeraTerm or PuTTy, download and install it. Either one works fine.
+
+# From your PC, use Device Manager => Ports: look for COM port. (My computer shows COM5 & COM6)
+# Set the following parameters:
+Baud rate = 115200
+Data bits = 8
+Stop bits = 1
+Flow control = None
+Parity = None
+
+=============
+# KRIA KV260 username: ubuntu, password: ubuntu
+# later, when you password expires, change it to ee104sjsu
+
+=============
+# Note: If you are connecting the ethernet port of the KRIA KV260 to your home router, then you can issue these 3 commands. If not, see the steps below.
+ubuntu@kria:~$ping 8.8.8.8
+ubuntu@kria:~$sudo snap install xlnx-config --classic --channel=2.x
+ubuntu@kria:~$sudo xlnx-config.sysinit
+
+=============
+# Note: If you don't connect to a router from the KRIA KV260 Ethernet port, then you cannot ping yet. 
+# You must connect the ethenet cable to your PC ethernet port, and have your PC connect to the internet using WIFI.
+
+#Add Wifi for KV260 https://www.hackster.io/dramoz/adding-usb-wifi-for-the-kria-kv260-ubuntu-20-04-3-b5e8ea
+# See detail instructions below.
+
+========
+# NOTE: If your laptop does not have an ethernet RJ45 port, then purchase a USB-to-RJ45 converter. When you connect your PC to the 
+#  KRIA KV260 board using the ethernet cable via the RJ45-to-USB conversion, the laptop will show a new Ethernet connection. 
+#  Configure that Ethernet port similarly to the method below as if you Ethernet is on board.
+
+# Laptop: Configure your ethernet port as below
+# IP Address: 192.168.0.1, Subnet Mask: 255.255.255.0, DNS server address 8.8.8.8
+Configure Control Panel => Network and Internet => Network and Sharing Center ==> Change Adapter Setting => Right click on Ethernet => Property => Internet Protocol Version 4 (TCP/IPv4) => Click on the button "Property" ==>  Select use the following IP address: ==> IP address 192.168.0.1, Subnet mask: 255.255.255.0 and Use the following DNS server address 8.8.8.8 => Click OK => click Close 
+
+#You may have to force the address to 192.168.0.1 using instruction from here 
+# https://forums.tomshardware.com/faq/how-to-change-default-internet-connection-sharing-ip-address-range.1606758/
+
+#Now confiture WIFI to be shared by devices connected to the PC Ethernet port:
+Configure Control Panel => Network and Internet => Network and Sharing Center ==> Change Adapter Setting =>   Right click on WIFI ==> Property =>  Sharing: set to share using Ethernet ==> press the Settings button ==> Select the services running on your network that Internet users can access (pick a number, such as 1700) ==> Service Setting popup: name of the computer is your computer name, use TCP port 21 
+
+
+===================
+# Check if KRIA KV260 can access the internet:
+ubuntu@kria:~$ping 8.8.8.8
+# if you can ping, then you can move on to install PYNQ to KRIA
+
+# now get the board IP address:
+ubuntu@kria:~$ip addr show dev eth0
+
+# you should see something like below:
+ubuntu@kria:~$ ip addr show dev eth0
+3: eth0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc mq state UP group default qlen 1000
+    link/ether 00:0a:35:00:22:01 brd ff:ff:ff:ff:ff:ff
+    inet 192.168.0.36/24 brd 192.168.0.255 scope global dynamic noprefixroute eth0
+       valid_lft 604107sec preferred_lft 604107sec
+    inet6 fe80::dd40:93c6:58ff:245b/64 scope link noprefixroute
+       valid_lft forever preferred_lft forever
+	   
+=> that means your KRIA KV260 IP address is 192.168.0.36
+
+
+====
+# Setup DNS: 192.168.0.1, Default Gateway: 192.168.0.1
+
+ubuntu@kria:~$ ip link
+1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN mode DEFAULT group default qlen 1000
+    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+2: sit0@NONE: <NOARP> mtu 1480 qdisc noop state DOWN mode DEFAULT group default qlen 1000
+    link/sit 0.0.0.0 brd 0.0.0.0
+3: eth0: <NO-CARRIER,BROADCAST,MULTICAST,UP> mtu 1500 qdisc mq state DOWN mode DEFAULT group default qlen 1000
+    link/ether 00:0a:35:00:22:01 brd ff:ff:ff:ff:ff:ff
+ubuntu@kria:~$
+
+==> should see 3:eth0 
+
+current password "ubuntu" will expire ==> change password to "ee104sjsu"
+
+---
+ubuntu@kria:~$sudo nano /etc/cloud/cloud.cfg.d/99-disable-network-config.cfg
+network: {config: disabled}
+
+---
+#####NOTE: the indentation of any file in Linux is very important, especiall for *.yaml files and
+##### other configuration files.
+##### You should show the file below in NotePad++ to see the indentations.
+ubuntu@kria:~$sudo nano /etc/netplan/01-netcfg.yaml
+network:
+  version: 2
+  renderer: networkd
+  ethernets:
+    eth0:
+      dhcp4: no
+      addresses:
+        - 192.168.0.12/24
+      gateway4: 192.168.0.1
+      nameservers:
+          addresses: [192.168.0.1]
+---
+ubuntu@kria:~$sudo netplan apply
+---
+ubuntu@kria:~$ip addr show dev eth0
+
+ubuntu@kria:~$ping www.google.com
+==> verify that you can ping
+
+################################################################
+#install PYNQ on KRIA KV260 https://github.com/Xilinx/Kria-PYNQ#
+################################################################
+
+# This step can take more than 30 minutes depending on your network #
+
+#Install PYNQ
+ubuntu@kria:~$git clone https://github.com/Xilinx/Kria-PYNQ
+ubuntu@kria:~$cd Kria-PYNQ/
+ubuntu@kria:~$sudo bash install.sh
+
+# Now reboot your KRIA if you cannot connect to it from the URL: kria:9090/lab
+
+#Open Jupyter
+# JupyterLab can now be accessed via a web browser <ip_address>:9090/lab or kria:9090/lab. The password is xilinx
+#  i.e. 192.168.0.2:9090/lab   or kria:9090/lab 
+
+
+################################################################
+###########     Now following instruction from Lab 6 ###########
+################################################################
+
+
+################################################################
+##If you want to save your SD card image after all these steps##
+## then follow the instructions from this webpage:            ##
+## https://raspberrytips.com/create-image-sd-card/            ##
+################################################################
+
+
+################################################################
+############    THE FOLLOWINGS ARE FOR AI LABS    ##############
+################################################################
+
+#check Ubuntu release version: https://kinsta.com/knowledgebase/check-ubuntu-version/
+ubuntu@kria:~$lsb_release -a
+
+Distributor ID: Ubuntu
+Description:    Ubuntu 20.04.4 LTS
+Release:        20.04
+Codename:       focal
+
+#check how much space left: df command
+
+#from https://monovm.com/blog/how-to-upgrade-pip-package/
+ubuntu@kria:~$sudo apt update
+ubuntu@kria:~$sudo apt install python3 python3-pip
+
+#from https://www.tensorflow.org/lite/guide/build_arm
+ubuntu@kria:~$git clone https://github.com/tensorflow/tensorflow.git tensorflow_src
+
+
+
+
+
+
+
+#======Installing Bazel on Ubuntu==========================
+
+# goto https://bazel.build/install/ubuntu
+#Step 1: run 4 lines of commands below. Answer Y to all Y/N questions.
+ubuntu@kria:~$sudo apt install apt-transport-https curl gnupg
+ubuntu@kria:~$curl -fsSL https://bazel.build/bazel-release.pub.gpg | gpg --dearmor >bazel-archive-keyring.gpg
+ubuntu@kria:~$sudo mv bazel-archive-keyring.gpg /usr/share/keyrings
+ubuntu@kria:~$echo "deb [arch=amd64 signed-by=/usr/share/keyrings/bazel-archive-keyring.gpg] https://storage.googleapis.com/bazel-apt stable jdk1.8" | sudo tee /etc/apt/sources.list.d/bazel.list
+
+#Step 2: run the commands below. Answer Y to all Y/N questions
+ubuntu@kria:~$sudo apt update && sudo apt install bazel
+ubuntu@kria:~$sudo apt update && sudo apt full-upgrade
+#======DONE Installing Bazel on Ubuntu==========================
+
+##############################################################################################
+#===================DON'T DO THESE STEPS BELOW IF THE ABOVE METHOD IS SUCCESSFUL ============#
+#vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv#
+
+#install Basel https://bazel.build/install/ubuntu using the binary method
+ubuntu@kria:~$sudo apt install g++ unzip zip
+
+#Next, download the Bazel binary installer named bazel-5.2.0-installer-darwin-arm64.sh from the Bazel releases page on GitHub. You can download to your PC, then upload to folder /home/root/jupyter_notebooks
+
+#### The following steps are from https://data-flair.training/blogs/transfer-data-from-windows-to-ubuntu/
+#### to install SSH Server & Client to ubuntu
+#Step 1. Install the SSH package on Ubuntu using the next command.
+ubuntu@kria:~$sudo apt-get install openssh-server openssh-client
+#Step 2. After installation finishes successfully, you can check the SSH service status using the following command.
+ubuntu@kria:~$sudo service ssh status
+#if the service is not running, type the following command:
+ubuntu@kria:~$sudo service ssh start
+#Also, to enable the SSH service to start every time your system starts up, you can use the following command:
+ubuntu@kria:~$sudo service ssh enable
+#Step 3. Execute the next command to get your Ubuntu machine IP.
+ubuntu@kria:~$ifconfig
+
+
+
+# go to this page for latest Bazil release https://github.com/bazelbuild/bazel/releases 
+#   and download this file bazel-5.3.1-installer-darwin-arm64.sh then copy to folder /home/root/jupyter_notebooks
+ubuntu@kria:~$wget https://github.com/bazelbuild/bazel/releases/download/5.3.1/bazel-5.3.1-installer-darwin-arm64.sh
+
+
+
+
+
+ubuntu@kria:~$cd /home/root/jupyter_notebooks 
+ubuntu@kria:~$chmod +x bazel-5.2.0-installer-darwin-arm64.sh
+ubuntu@kria:~$./bazel-5.2.0-installer-darwin-arm64.sh --user
+ubuntu@kria:~$export PATH="$PATH:$HOME/bin"
+# You can also add this command to your ~/.bashrc or ~/.zshrc file to make it permanent.
+
+#https://github.com/bazelbuild/bazel/releases for all bazel binaries of all official releases
+#^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^###
+#===================DON'T DO THE ABOVE STEPS IF THE ABOVE METHOD IS SUCCESSFUL ============###
+##############################################################################################
+
+
+#then proceed to the 2 commands below
+ubuntu@kria:~$git clone https://github.com/tensorflow/tensorflow.git tensorflow_src
+ubuntu@kria:~$bazel build --config=elinux_aarch64 -c opt //tensorflow/lite/c:libtensorflowlite_c.so
+
+
+
+
