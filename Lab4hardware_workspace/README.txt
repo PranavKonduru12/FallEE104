@@ -2,15 +2,13 @@ Name: Pranav Konduru
 Class: EE 104
 Lab 4, part 2: Traffic Controller
 
-Video link: 
+Video link: https://youtu.be/vbEhWIo7ioQ
 
 
 
-***MAKE SURE THAT THE FOLLOWING PYTHON MODULES ARE INSTALLED using pip install "library name"***
+Requirements doc: Lab4-Ahkab-TrafficController
 
-
-Notes
-- Use LEDs to classify each state
+Report: Lab4HardwareReadMe
 
 
 
