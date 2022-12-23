@@ -1,5 +1,0 @@
-FirstName,MiddleName,LastName,DOB,PhoneNumber,Email,StreetAddress,CurrentDate,FutureDate,InContact,Travel,HaveSymptoms,Sent,SendText
-Pranav,,Konduru,2000-10-10,9255777863,pranav.konduru@sjsu.edu,"1 Washinngton Sq, San Jose",2022-09-10 00:05:00,2022-10-01 00:05:00,No,Yes,No,1,19255777863
-Joe,,K,1990-10-10,9255777863,pranav.konduru@sjsu.edu,One Washington Sq,2022-09-10 00:05:00,2022-10-01 00:05:00,No,Yes,No,1,19255777863
-Bob,,R,1995-10-10,9255777863,pranav.konduru@sjsu.edu,One Washington Sq,2022-09-10 00:05:00,2022-10-01 00:05:00,No,No,No,1,19255777863
-Doug,,L,1995-10-10,9255777863,pranav.konduru@sjsu.edu,One Washington St,2022-09-10 00:05:00,2022-10-01 00:05:00,No,Yes,No,1,19255777863
